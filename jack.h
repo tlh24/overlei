@@ -60,7 +60,9 @@ class Jack
 			return (int)(t.frame); 
 		 } else return 0; 
 	 }
-  
+
+	 std::list<Note> openNotes; 
+	 std::list<Note> noteVector; 
   private:
     
     int previousFrame;
@@ -71,8 +73,6 @@ class Jack
 	 int m_recChan = 0; 
     
     std::vector<MidiEvent> eventVector;
-	 std::list<Note> openNotes; 
-	 std::list<Note> noteVector; 
 /*store events in order (set) for playback & rapid insertion & removal.
  * thoughts: want minimal (or no) redundant data, so we don't have to worry about coherency.
  * initially I thought that keeping the note on and off information together makes sense, 

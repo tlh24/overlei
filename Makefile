@@ -15,10 +15,10 @@ OBJS := main.o jack.o
 all: overlei
 
 %.o: %.cpp 
-	g++ -c $(CFLAGS) $(GTKFLAGS) $< -o $@
+	g++ -c -g $(CFLAGS) $(GTKFLAGS) $< -o $@
 
 overlei: $(OBJS)
-	g++ -o $@ $(GTKLD) $(LDFLAGS) $(OBJS)
+	g++ -g -o $@ $(GTKLD) $(LDFLAGS) $(OBJS)
 
 clean:
 	rm -rf overlei

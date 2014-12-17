@@ -121,18 +121,19 @@ int Jack::process(jack_nframes_t nframes)
       std::cout << "Frame " << position.frame << "  Event: " << i << " SubFrame#: " << in_event.time << " \tMessage:\t"
                 << (long)in_event.buffer[0] << "\t" << (long)in_event.buffer[1]
                 << "\t" << (long)in_event.buffer[2] << std::endl;
-      
-      eventVector.push_back( MidiEvent( position.frame + (long)in_event.time, (unsigned char*)in_event.buffer ) );
+					 
+      long time = position.frame + (long)in_event.time; 
+      eventVector.push_back( MidiEvent( time, (unsigned char*)in_event.buffer ) );
 		unsigned char ev = in_event.buffer[0]; 
 		unsigned char tone = in_event.buffer[1]; 
 		unsigned char vel = in_event.buffer[2];
-		long time = position.frame + (long)in_event.time; 
 		//recording accepts from all channels... 
 		if(ev >= 0x90 && ev <= 0x9f){
 			openNotes.push_back( Note(m_recChan, tone, vel, 0,
 					time, 0) ); 
+			printf("opened an note, %d\n", tone); 
 		}
-		if(ev >= 0x80 && ev >= 0x8f){
+		if(ev >= 0x80 && ev <= 0x8f){
 			std::list<Note>::iterator it;
 			for(it=openNotes.begin(); it != openNotes.end(); ++it){
 				// you have to release every key that you press.
@@ -140,6 +141,7 @@ int Jack::process(jack_nframes_t nframes)
 					(*it).Close(vel, time); 
 					noteVector.push_back((*it)); 
 					it = openNotes.erase(it); 
+					printf("closed a note, %d %d\n", tone, time); 
 				}
 			}
 		}
