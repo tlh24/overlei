@@ -30,9 +30,14 @@
 
 #include "midi.h"
 
-class Jack
-{
-  public:
+struct event_compare {
+	bool operator() (const MidiEvent& lhs, const MidiEvent& rhs) const{
+		return lhs.frame < rhs.frame;
+	}
+};
+
+class Jack{
+public:
     Jack();
     ~Jack();
     
@@ -63,6 +68,7 @@ class Jack
 
 	 std::list<Note> openNotes; 
 	 std::list<Note> noteVector; 
+	 std::set<MidiEvent, event_compare> eventSet; 
   private:
     
     int previousFrame;

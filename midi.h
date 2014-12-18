@@ -25,17 +25,15 @@
 #include <iostream>
 #include <cstring>
 
-class MidiEvent
-{
-  public:
-    MidiEvent(){}
-    MidiEvent(long inFrame, unsigned char* inData)
-    {
-      frame = inFrame;
-      memcpy( data, inData, sizeof(unsigned char) *3 );
-    }
-    long frame;
-    unsigned char data[3];
+class MidiEvent{
+public:
+	long frame;
+	unsigned char data[3];
+	MidiEvent(){}
+	MidiEvent(long inFrame, unsigned char* inData){
+		frame = inFrame;
+		memcpy( data, inData, 3 );
+	}
 };
 
 class Note{

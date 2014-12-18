@@ -134,6 +134,22 @@ static void mk_button(const char *label, GtkWidget *container,
 }
 
 static void cb_play(GtkWidget *, gpointer){
+	// refresh the eventSet from the gui data.
+	g_jack.eventSet.clear(); 
+	unsigned char data[3]; 
+	std::list<Note>::iterator it;
+	for(it=g_jack.noteVector.begin(); it != g_jack.noteVector.end(); ++it){
+		data[0] = 0x90 + (*it).m_chan; 
+		data[1] = (*it).m_tone; 
+		data[2] = (*it).m_vel_on; 
+		MidiEvent m = MidiEvent((*it).m_start, data); 
+		g_jack.eventSet.insert(m); 
+		data[0] = 0x80 + (*it).m_chan; 
+		data[1] = (*it).m_tone; 
+		data[2] = (*it).m_vel_off; 
+		MidiEvent n = MidiEvent((*it).m_end, data); 
+		g_jack.eventSet.insert(n); 
+	}
 	g_jack.play(); 
 }
 static void cb_stop(GtkWidget *, gpointer){
